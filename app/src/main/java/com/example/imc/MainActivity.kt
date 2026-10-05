@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
@@ -133,27 +134,69 @@ fun ImcScreen(modifier: Modifier = Modifier) {
                         )
                     )
 
-                    Button(
-                        onClick = {
-                            val pesoDouble = peso.toDoubleOrNull()
-                            val alturaDouble = altura.toDoubleOrNull()
+                    Row(modifier = Modifier
+                        .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
 
-                            if (pesoDouble == null || alturaDouble == null || pesoDouble <= 0.0 || alturaDouble <= 0.0) {
-                                resultadoIMC = "CAMPO INVÁLIDO"
-                            } else {
-                                imc = CalcularImc(pesoDouble, alturaDouble)
-                                resultadoIMC = DecisaoImc(imc)
-                            }
-                        },
-                        modifier = Modifier
-                            .width(300.dp)
-                            .height(50.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(R.color.cor_app)
-                        ),
                     ) {
-                        Text(text = "CALCULAR")
+                        Button(
+                            onClick = {
+                                val pesoDouble = peso.toDoubleOrNull()
+                                val alturaDouble = altura.toDoubleOrNull()
+
+                                peso = ""
+                                altura = ""
+
+
+                                if (pesoDouble == null || alturaDouble == null || pesoDouble <= 0.0 || alturaDouble <= 0.0) {
+                                    resultadoIMC = "CAMPO INVÁLIDO"
+                                } else {
+                                    imc = CalcularImc(pesoDouble, alturaDouble)
+                                    resultadoIMC = DecisaoImc(imc)
+                                }
+
+
+
+                            },
+                            modifier = Modifier
+                                .width(150.dp)
+                                .height(50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(R.color.cor_app)
+                            ),
+
+
+                        ) {
+                            Text(text = "CALCULAR",
+                                fontWeight = FontWeight.Bold
+
+                            )
+                        }
+
+                        Button(
+                            onClick = {
+                                peso = ""
+                                altura = ""
+                            },
+
+                            modifier = Modifier
+                                .width(150.dp)
+                                .height(50.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(R.color.cor_app)
+                            ),
+                        ) {
+                            Text(text = "CANCELAR",
+                                fontWeight = FontWeight.Bold
+
+                            )
+                        }
                     }
+
+
+
+
+
                 }
             }
 
@@ -161,6 +204,8 @@ fun ImcScreen(modifier: Modifier = Modifier) {
 
             val cor: Color = CorFundo(imc)
             CriarCard(cor, resultadoIMC, imc)
+
+
         }
     }
 }
@@ -230,10 +275,6 @@ fun CriarCard(corFundo: Color, resultadoIMC: String, imc: Double) {
     }
 }
 
-
-
-
-@Composable
 fun CorFundo(imc: Double): Color {
     return if (imc == 0.0) {
         Color.Gray
